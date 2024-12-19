@@ -27,11 +27,12 @@ const AllArtAndCraftList = () => {
     // data fetch
 
     const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
-        queryKey: ['allItems'],
+        queryKey: ['allItems', currentPage, itemsPerPage],
         queryFn: async () => {
-            const { data } = await axios.get('/all-art-and-craft-items')
+            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}`)
             return data || [];
         }
+
     })
 
     console.log(artAndCraftItems)
@@ -59,6 +60,8 @@ const AllArtAndCraftList = () => {
         return toast.error(error.message)
     }
 
+
+
     const handlePrev = () => {
         if (currentPage > 0) {
             setCurrentPage(currentPage - 1)
@@ -70,8 +73,6 @@ const AllArtAndCraftList = () => {
             setCurrentPage(currentPage + 1)
         }
     }
-
-
 
 
 
@@ -135,7 +136,7 @@ const AllArtAndCraftList = () => {
                             <li
                                 onClick={handlePrev}
                                 aria-disabled={currentPage === 0}
-                                className={`${currentPage === 0 ? 'cursor-not-allowed bg-gray-100 hover:border-none' : 'hover:border-blue-500'} flex items-center justify-center shrink-0 border cursor-pointer w-9 h-9 rounded-md`}>
+                                className={`${currentPage === 0 ? 'cursor-not-allowed bg-gray-100 hover:border-none' : 'hover:border-blue-500 cursor-pointer'} flex items-center justify-center shrink-0 border w-9 h-9 rounded-md`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-gray-400" viewBox="0 0 55.753 55.753">
                                     <path
                                         d="M12.745 23.915c.283-.282.59-.52.913-.727L35.266 1.581a5.4 5.4 0 0 1 7.637 7.638L24.294 27.828l18.705 18.706a5.4 5.4 0 0 1-7.636 7.637L13.658 32.464a5.367 5.367 0 0 1-.913-.727 5.367 5.367 0 0 1-1.572-3.911 5.369 5.369 0 0 1 1.572-3.911z"
@@ -155,7 +156,7 @@ const AllArtAndCraftList = () => {
                             <li
                                 onClick={handleNext}
                                 aria-disabled={currentPage === pages.length - 1}
-                                className={`${currentPage === pages.length - 1 ? 'cursor-not-allowed bg-gray-100 hover:border-none' : 'hover:border-blue-500'} flex items-center justify-center shrink-0 border cursor-pointer w-9 h-9 rounded-md`}>
+                                className={`${currentPage === pages.length - 1 ? 'cursor-not-allowed bg-gray-100 hover:border-none' : 'hover:border-blue-500 cursor-pointer'} flex items-center justify-center shrink-0 border w-9 h-9 rounded-md`}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-gray-400 rotate-180" viewBox="0 0 55.753 55.753">
                                     <path
                                         d="M12.745 23.915c.283-.282.59-.52.913-.727L35.266 1.581a5.4 5.4 0 0 1 7.637 7.638L24.294 27.828l18.705 18.706a5.4 5.4 0 0 1-7.636 7.637L13.658 32.464a5.367 5.367 0 0 1-.913-.727 5.367 5.367 0 0 1-1.572-3.911 5.369 5.369 0 0 1 1.572-3.911z"

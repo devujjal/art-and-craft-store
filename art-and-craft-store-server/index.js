@@ -78,6 +78,10 @@ async function run() {
 
 
         app.get('/all-art-and-craft-items', async (req, res) => {
+            console.log(req.query)
+
+            const page = parseInt(req.query?.page);
+            const size = parseInt(req.query?.size);
 
             let query = {};
             if (req.query?.email) {
@@ -89,7 +93,7 @@ async function run() {
                 query.sub_category = req.query.sub_category;
             }
 
-            const cursor = allArtAndCraft.find(query);
+            const cursor = allArtAndCraft.find(query).skip(page * size).limit(size);
             const result = await cursor.toArray();
             res.send(result)
 
