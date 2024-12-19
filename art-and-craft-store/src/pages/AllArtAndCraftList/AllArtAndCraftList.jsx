@@ -2,6 +2,7 @@ import CarftAndArtCard from "../../componets/CaftAndArtCard/CarftAndArtCard";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { ToastContainer, toast } from 'react-toastify';
+import { useEffect, useState } from "react";
 
 
 const AllArtAndCraftList = () => {
@@ -9,10 +10,18 @@ const AllArtAndCraftList = () => {
     const axios = useAxiosCommon();
     // const [artAndCraftItems, setArtAndCraftItems] = useState([]);
     // const [isLoading, setIsLoading] = useState(true);
-    // const itemsPerPage = 10; if 
+    // const itemsPerPage = 10; if fix items per page
+    const [counts, setCounts] = useState(0)
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0)
     const skeletonItems = new Array(8).fill(null);
 
 
+    const numberOfPages = counts.result ? Math.ceil(counts.result / itemsPerPage) : 0;
+
+    const pages = [...Array(numberOfPages).keys()]
+
+    console.log(pages)
 
     // data fetch
 
@@ -29,17 +38,22 @@ const AllArtAndCraftList = () => {
     console.log(artAndCraftItems)
 
 
-    const { data: counts } = useQuery({
-        queryKey: ['itemsCount'],
-        queryFn: async () => {
-            const result = await axios.get('/items-count');
-            console.log(result)
-            return result.data || {};
-        }
-    })
+    // const { data: counts } = useQuery({
+    //     queryKey: ['itemsCount'],
+    //     queryFn: async () => {
+    //         const result = await axios.get('/items-count');
+    //         // console.log(result)
+    //         return result.data || {};
+    //     }
+    // })
 
-    console.log(counts)
 
+    useEffect(() => {
+        axios.get('/items-count')
+            .then(res => {
+                setCounts(res.data)
+            })
+    }, [axios])
 
 
     if (isError) {
@@ -95,6 +109,37 @@ const AllArtAndCraftList = () => {
                                 )
 
                         }
+                    </div>
+                    <div>
+                        <p>Page: {currentPage}</p>
+                    </div>
+                    <div>
+                        <ul className="flex space-x-5 justify-center font-[sans-serif]">
+                            <li className="flex items-center justify-center shrink-0 bg-gray-100 w-9 h-9 rounded-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-gray-400" viewBox="0 0 55.753 55.753">
+                                    <path
+                                        d="M12.745 23.915c.283-.282.59-.52.913-.727L35.266 1.581a5.4 5.4 0 0 1 7.637 7.638L24.294 27.828l18.705 18.706a5.4 5.4 0 0 1-7.636 7.637L13.658 32.464a5.367 5.367 0 0 1-.913-.727 5.367 5.367 0 0 1-1.572-3.911 5.369 5.369 0 0 1 1.572-3.911z"
+                                        data-original="#000000" />
+                                </svg>
+                            </li>
+
+                            {pages.map(map => (
+                                <li
+                                    key={map}
+                                    onClick={() => setCurrentPage(map)}
+                                    className={`${currentPage === map ? 'bg-blue-500': ''} flex items-center justify-center shrink-0 border hover:border-blue-500 cursor-pointer text-base font-bold text-gray-800 px-[13px] h-9 rounded-md`}>
+                                    {map}
+                                </li>
+                            ))}
+
+                            <li className="flex items-center justify-center shrink-0 border hover:border-blue-500 cursor-pointer w-9 h-9 rounded-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-gray-400 rotate-180" viewBox="0 0 55.753 55.753">
+                                    <path
+                                        d="M12.745 23.915c.283-.282.59-.52.913-.727L35.266 1.581a5.4 5.4 0 0 1 7.637 7.638L24.294 27.828l18.705 18.706a5.4 5.4 0 0 1-7.636 7.637L13.658 32.464a5.367 5.367 0 0 1-.913-.727 5.367 5.367 0 0 1-1.572-3.911 5.369 5.369 0 0 1 1.572-3.911z"
+                                        data-original="#000000" />
+                                </svg>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
