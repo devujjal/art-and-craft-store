@@ -13,7 +13,7 @@ const AllArtAndCraftList = () => {
     // const itemsPerPage = 10; if fix items per page
     const [counts, setCounts] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [currentPage, setCurrentPage] = useState(0)
+    const [currentPage, setCurrentPage] = useState(0);
     const skeletonItems = new Array(8).fill(null);
 
 
@@ -22,6 +22,7 @@ const AllArtAndCraftList = () => {
     const pages = [...Array(numberOfPages).keys()]
 
     console.log(pages)
+    console.log(itemsPerPage)
 
     // data fetch
 
@@ -33,10 +34,7 @@ const AllArtAndCraftList = () => {
         }
     })
 
-
-
     console.log(artAndCraftItems)
-
 
     // const { data: counts } = useQuery({
     //     queryKey: ['itemsCount'],
@@ -56,9 +54,17 @@ const AllArtAndCraftList = () => {
     }, [axios])
 
 
+
     if (isError) {
         return toast.error(error.message)
     }
+
+
+    const handleNext = () => {
+
+    }
+
+
 
 
 
@@ -110,10 +116,12 @@ const AllArtAndCraftList = () => {
 
                         }
                     </div>
+
                     <div>
                         <p>Page: {currentPage}</p>
                     </div>
-                    <div>
+
+                    <div className="flex items-center justify-center gap-4">
                         <ul className="flex space-x-5 justify-center font-[sans-serif]">
                             <li className="flex items-center justify-center shrink-0 bg-gray-100 w-9 h-9 rounded-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-gray-400" viewBox="0 0 55.753 55.753">
@@ -127,12 +135,14 @@ const AllArtAndCraftList = () => {
                                 <li
                                     key={map}
                                     onClick={() => setCurrentPage(map)}
-                                    className={`${currentPage === map ? 'bg-blue-500': ''} flex items-center justify-center shrink-0 border hover:border-blue-500 cursor-pointer text-base font-bold text-gray-800 px-[13px] h-9 rounded-md`}>
+                                    className={`${currentPage === map ? 'bg-blue-500' : ''} flex items-center justify-center shrink-0 border hover:border-blue-500 cursor-pointer text-base font-bold text-gray-800 px-[13px] h-9 rounded-md`}>
                                     {map}
                                 </li>
                             ))}
 
-                            <li className="flex items-center justify-center shrink-0 border hover:border-blue-500 cursor-pointer w-9 h-9 rounded-md">
+                            <li
+                                // onClick={handleNext}
+                                className="flex items-center justify-center shrink-0 border hover:border-blue-500 cursor-pointer w-9 h-9 rounded-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3 fill-gray-400 rotate-180" viewBox="0 0 55.753 55.753">
                                     <path
                                         d="M12.745 23.915c.283-.282.59-.52.913-.727L35.266 1.581a5.4 5.4 0 0 1 7.637 7.638L24.294 27.828l18.705 18.706a5.4 5.4 0 0 1-7.636 7.637L13.658 32.464a5.367 5.367 0 0 1-.913-.727 5.367 5.367 0 0 1-1.572-3.911 5.369 5.369 0 0 1 1.572-3.911z"
@@ -140,6 +150,17 @@ const AllArtAndCraftList = () => {
                                 </svg>
                             </li>
                         </ul>
+
+                        <div>
+                            <select value={itemsPerPage} onChange={(e) => {
+                                const inputValue = parseInt(e.target.value);
+                                setItemsPerPage(inputValue)
+                            }}>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
