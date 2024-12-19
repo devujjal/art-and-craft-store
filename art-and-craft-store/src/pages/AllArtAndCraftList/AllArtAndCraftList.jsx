@@ -14,6 +14,27 @@ const AllArtAndCraftList = () => {
 
 
 
+    // data fetch
+
+    const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
+        queryKey: ['allItems'],
+        queryFn: async () => {
+            const { data } = await axios.get('/all-art-and-craft-items')
+            return data || [];
+        }
+    })
+
+
+
+    console.log(artAndCraftItems)
+
+
+
+
+    if (isError) {
+        return toast.error(error.message)
+    }
+
 
 
     return (
