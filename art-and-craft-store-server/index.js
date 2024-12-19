@@ -78,7 +78,6 @@ async function run() {
 
 
         app.get('/all-art-and-craft-items', async (req, res) => {
-            console.log(req.query)
 
             const page = parseInt(req.query?.page);
             const size = parseInt(req.query?.size);

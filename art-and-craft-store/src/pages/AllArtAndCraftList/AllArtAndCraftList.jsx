@@ -21,21 +21,26 @@ const AllArtAndCraftList = () => {
 
     const pages = [...Array(numberOfPages).keys()]
 
-    console.log(pages)
-    console.log(itemsPerPage)
+    // console.log(pages)
+    // console.log(itemsPerPage)
+
+    useEffect(() => {
+        setCurrentPage(0);
+    },[itemsPerPage])
 
     // data fetch
 
     const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
         queryKey: ['allItems', currentPage, itemsPerPage],
         queryFn: async () => {
-            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}`)
+            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}`);
             return data || [];
-        }
+        },
 
+        keepPreviousData: true // Optional: Helps to prevent unnecessary refetches
     })
 
-    console.log(artAndCraftItems)
+    // console.log(artAndCraftItems)
 
     // const { data: counts } = useQuery({
     //     queryKey: ['itemsCount'],
