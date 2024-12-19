@@ -1,24 +1,18 @@
-import { useEffect, useState } from "react";
 import CarftAndArtCard from "../../componets/CaftAndArtCard/CarftAndArtCard";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const AllArtAndCraftList = () => {
 
-    const [artAndCraftItems, setArtAndCraftItems] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const axios = useAxiosCommon();
+    // const [artAndCraftItems, setArtAndCraftItems] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true);
+    // const itemsPerPage = 10; if 
     const skeletonItems = new Array(8).fill(null);
 
 
-
-    useEffect(() => {
-        setIsLoading(true);
-        fetch('http://localhost:5000/all-art-and-craft-items')
-            .then(res => res.json())
-            .then(data => {
-
-                setArtAndCraftItems(data);
-                setIsLoading(false);
-            })
-    }, [])
 
 
 
@@ -26,6 +20,7 @@ const AllArtAndCraftList = () => {
         <section>
             <div className="container mx-auto">
                 <div className="py-14">
+                    <ToastContainer />
                     <div className="text-center px-10 md:px-20 lg:px-40">
                         <h1 className="text-[40px] font-yan text-[#3e454c]">Explore the World of Art & Craft</h1>
                         <p className="font-raj text-base font-normal mb-5">Unleash your creativity and discover a curated collection of exquisite art and craft items. From breathtaking paintings to intricate handmade creations, our selection showcases the beauty of artistic expression and craftsmanship. Whether you&apos;re looking for inspiration, decoration, or a unique gift, you&apos;ll find pieces that bring imagination to life and add a touch of elegance to any space.</p>

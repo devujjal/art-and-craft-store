@@ -16,11 +16,7 @@ app.use(cookieParser())
 
 
 
-<<<<<<< HEAD
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.iam7h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-=======
-const uri = `mongodb+srv://${process.env.DB_USRE}:${process.env.DB_PASS}@cluster0.iam7h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
->>>>>>> 09d3da682cc1b40aa999f7abd05968ed478174e6
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -80,6 +76,7 @@ async function run() {
             res.send(result)
         })
 
+
         app.get('/all-art-and-craft-items', async (req, res) => {
 
             let query = {};
@@ -97,6 +94,15 @@ async function run() {
             res.send(result)
 
         })
+
+
+        //estamaticCount
+        app.get('/items-count', async (req, res) => {
+            const result = await allArtAndCraft.countDocuments();
+            res.send({ result })
+        })
+
+
 
         app.get('/all-art-and-craft-items/:id', async (req, res) => {
             const id = req.params.id;

@@ -11,10 +11,7 @@
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
-<<<<<<< HEAD
     "@tanstack/react-query": "^5.62.8",
-=======
->>>>>>> 09d3da682cc1b40aa999f7abd05968ed478174e6
     "axios": "^1.7.9",
     "firebase": "^11.0.2",
     "prop-types": "^15.8.1",
