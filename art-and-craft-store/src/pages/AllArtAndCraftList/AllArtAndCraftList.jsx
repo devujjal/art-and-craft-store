@@ -29,6 +29,17 @@ const AllArtAndCraftList = () => {
     console.log(artAndCraftItems)
 
 
+    const { data: counts } = useQuery({
+        queryKey: ['itemsCount'],
+        queryFn: async () => {
+            const result = await axios.get('/items-count');
+            console.log(result)
+            return result.data || {};
+        }
+    })
+
+    console.log(counts)
+
 
 
     if (isError) {
