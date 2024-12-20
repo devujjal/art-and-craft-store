@@ -79,12 +79,12 @@ async function run() {
 
         app.get('/all-art-and-craft-items', async (req, res) => {
             try {
-                console.log(req.query);
 
                 const page = parseInt(req.query?.page) || 0; // Default to 0 if undefined or invalid
                 const size = parseInt(req.query?.size) || 10; // Default to 10 if undefined or invalid
                 const filter = req.query?.filter;
                 const sort = req.query?.sort;
+                const search = req.query?.search;
 
                 let query = {};
                 if (req.query?.email) {
@@ -104,6 +104,10 @@ async function run() {
                     options = { sort: { price: sort === "asc" ? 1 : -1 } }
                 }
 
+                if (search) {
+                    query.item_name = { $regex: search, $options: "i" }
+                }
+
                 const cursor = allArtAndCraft.find(query, options).skip(page * size).limit(size);
                 const result = await cursor.toArray();
                 res.send(result);
@@ -118,17 +122,22 @@ async function run() {
 
         //estamaticCount
         app.get('/items-count', async (req, res) => {
-            console.log(req.query)
             const filterText = req.query?.filter;
-            let filter = {};
+            const searchText = req.query?.search;
+
+            let query = {};  // filter or query
+
             if (filterText) {
-                filter = { subcategory_Name: filterText }
+                query = { subcategory_Name: filterText }
             }
 
-            const result = await allArtAndCraft.countDocuments(filter);
+            if (searchText) {
+                query.item_name = { $regex: searchText, $options: "i" }
+            }
+
+            const result = await allArtAndCraft.countDocuments(query);
             res.send({ result })
         })
-
 
 
         app.get('/all-art-and-craft-items/:id', async (req, res) => {
