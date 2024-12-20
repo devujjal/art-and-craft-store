@@ -84,6 +84,7 @@ async function run() {
                 const page = parseInt(req.query?.page) || 0; // Default to 0 if undefined or invalid
                 const size = parseInt(req.query?.size) || 10; // Default to 10 if undefined or invalid
                 const filter = req.query?.filter;
+                const sort = req.query?.sort;
 
                 let query = {};
                 if (req.query?.email) {
@@ -98,7 +99,12 @@ async function run() {
                     query.subcategory_Name = filter;
                 }
 
-                const cursor = allArtAndCraft.find(query).skip(page * size).limit(size);
+                let options = {};
+                if (sort) {
+                    options = { sort: { price: sort === "asc" ? 1 : -1 } }
+                }
+
+                const cursor = allArtAndCraft.find(query, options).skip(page * size).limit(size);
                 const result = await cursor.toArray();
                 res.send(result);
 
@@ -131,6 +137,7 @@ async function run() {
             const result = await allArtAndCraft.findOne(query);
             res.send(result)
         })
+
 
         app.get('/orders', verifyToken, async (req, res) => {
 

@@ -28,14 +28,14 @@ const AllArtAndCraftList = () => {
 
     useEffect(() => {
         setCurrentPage(0);
-    }, [itemsPerPage, filter])
+    }, [itemsPerPage, filter, sort])
 
     // data fetch
 
     const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
-        queryKey: ['allItems', currentPage, itemsPerPage, filter],
+        queryKey: ['allItems', currentPage, itemsPerPage, filter, sort],
         queryFn: async () => {
-            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`);
+            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}`);
             return data || [];
         },
 
@@ -100,8 +100,6 @@ console.log(sort)
                     <div className="flex justify-center items-center gap-6">
                         <select 
                         onChange={(e) => setFilter(e.target.value)}
-                        id="pricingType" 
-                        name="pricingType"
                         value={filter}
                             className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                             <option value="">Filter By Category</option>

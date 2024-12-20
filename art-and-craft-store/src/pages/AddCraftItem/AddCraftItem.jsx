@@ -31,7 +31,7 @@ const AddCraftItem = ({ update }) => {
         const item_name = form.item_name.value;
         const subcategory_Name = form.sub_category.value;
         const short_description = form.details.value;
-        const price = form.price.value;
+        const price = parseFloat(form.price.value);
         const rating = form.rating.value;
         const customization = form.customization.value;
         const processing_time = form.processing_time.value;
