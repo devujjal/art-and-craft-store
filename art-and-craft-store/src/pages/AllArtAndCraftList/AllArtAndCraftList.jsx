@@ -15,6 +15,8 @@ const AllArtAndCraftList = () => {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(0);
     const skeletonItems = new Array(8).fill(null);
+    const [filter, setFilter] = useState('');
+    const [sort, setSort] = useState('');
 
 
     const numberOfPages = counts.result ? Math.ceil(counts.result / itemsPerPage) : 0;
@@ -26,21 +28,21 @@ const AllArtAndCraftList = () => {
 
     useEffect(() => {
         setCurrentPage(0);
-    }, [itemsPerPage])
+    }, [itemsPerPage, filter])
 
     // data fetch
 
     const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
-        queryKey: ['allItems', currentPage, itemsPerPage],
+        queryKey: ['allItems', currentPage, itemsPerPage, filter],
         queryFn: async () => {
-            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}`);
+            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}`);
             return data || [];
         },
 
         keepPreviousData: true // Optional: Helps to prevent unnecessary refetches
     })
 
-    // console.log(artAndCraftItems)
+    console.log(artAndCraftItems)
 
     // const { data: counts } = useQuery({
     //     queryKey: ['itemsCount'],
@@ -53,12 +55,13 @@ const AllArtAndCraftList = () => {
 
 
     useEffect(() => {
-        axios.get('/items-count')
+        axios.get(`/items-count?filter=${filter}`)
             .then(res => {
                 setCounts(res.data)
             })
-    }, [axios])
+    }, [axios, filter])
 
+    console.log(counts)
 
 
     if (isError) {
@@ -80,7 +83,8 @@ const AllArtAndCraftList = () => {
     }
 
 
-
+console.log(filter)
+console.log(sort)
 
 
     return (
@@ -94,7 +98,11 @@ const AllArtAndCraftList = () => {
                     </div>
 
                     <div className="flex justify-center items-center gap-6">
-                        <select id="pricingType" name="pricingType"
+                        <select 
+                        onChange={(e) => setFilter(e.target.value)}
+                        id="pricingType" 
+                        name="pricingType"
+                        value={filter}
                             className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                             <option value="">Filter By Category</option>
                             <option value="Landscape Painting">Landscape Painting</option>
@@ -118,7 +126,11 @@ const AllArtAndCraftList = () => {
                         </div>
 
 
-                        <select id="pricingType" name="pricingType"
+                        <select 
+                        onChange={(e) => setSort(e.target.value)}
+                        id="pricingType" 
+                        name="pricingType"
+                        value={sort}
                             className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                             <option value="">Sort By Price</option>
                             <option value="dsc">Descending Order</option>

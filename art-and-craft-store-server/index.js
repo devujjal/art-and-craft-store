@@ -78,30 +78,48 @@ async function run() {
 
 
         app.get('/all-art-and-craft-items', async (req, res) => {
+            try {
+                console.log(req.query);
 
-            const page = parseInt(req.query?.page);
-            const size = parseInt(req.query?.size);
+                const page = parseInt(req.query?.page) || 0; // Default to 0 if undefined or invalid
+                const size = parseInt(req.query?.size) || 10; // Default to 10 if undefined or invalid
+                const filter = req.query?.filter;
 
-            let query = {};
-            if (req.query?.email) {
-                query = { email: req.query.email }
+                let query = {};
+                if (req.query?.email) {
+                    query.email = req.query.email;
+                }
+
+                if (req.query?.sub_category) {
+                    query.sub_category = req.query.sub_category;
+                }
+
+                if (filter) {
+                    query.subcategory_Name = filter;
+                }
+
+                const cursor = allArtAndCraft.find(query).skip(page * size).limit(size);
+                const result = await cursor.toArray();
+                res.send(result);
+
+            } catch (error) {
+                console.error("Error fetching items:", error);
+                res.status(500).send({ error: "Failed to fetch items" });
             }
+        });
 
-
-            if (req.query?.sub_category) {
-                query.sub_category = req.query.sub_category;
-            }
-
-            const cursor = allArtAndCraft.find(query).skip(page * size).limit(size);
-            const result = await cursor.toArray();
-            res.send(result)
-
-        })
 
 
         //estamaticCount
         app.get('/items-count', async (req, res) => {
-            const result = await allArtAndCraft.countDocuments();
+            console.log(req.query)
+            const filterText = req.query?.filter;
+            let filter = {};
+            if (filterText) {
+                filter = { subcategory_Name: filterText }
+            }
+
+            const result = await allArtAndCraft.countDocuments(filter);
             res.send({ result })
         })
 
