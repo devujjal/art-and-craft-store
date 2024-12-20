@@ -26,7 +26,7 @@ const AllArtAndCraftList = () => {
 
     useEffect(() => {
         setCurrentPage(0);
-    },[itemsPerPage])
+    }, [itemsPerPage])
 
     // data fetch
 
@@ -93,8 +93,19 @@ const AllArtAndCraftList = () => {
                         <p className="font-raj text-base font-normal mb-5">Unleash your creativity and discover a curated collection of exquisite art and craft items. From breathtaking paintings to intricate handmade creations, our selection showcases the beauty of artistic expression and craftsmanship. Whether you&apos;re looking for inspiration, decoration, or a unique gift, you&apos;ll find pieces that bring imagination to life and add a touch of elegance to any space.</p>
                     </div>
 
-                    <div>
-                        <div className="flex rounded-md border-2 border-[#0eb2e7] overflow-hidden max-w-md mx-auto">
+                    <div className="flex justify-center items-center gap-6">
+                        <select id="pricingType" name="pricingType"
+                            className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
+                            <option value="">Filter By Category</option>
+                            <option value="Landscape Painting">Landscape Painting</option>
+                            <option value="Portrait Drawing">Portrait Drawing</option>
+                            <option value="Watercolour Painting">Watercolour Painting</option>
+                            <option value="Oil Painting">Oil Painting</option>
+                            <option value="Charcoal Sketching">Charcoal Sketching</option>
+                            <option value="Cartoon Drawing">Cartoon Drawing</option>
+                        </select>
+
+                        <div className="flex rounded-md border-2 border-[#0eb2e7] overflow-hidden w-96">
                             <input type="email" placeholder="Search Something..."
                                 className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3" />
                             <button type='button' className="flex items-center justify-center bg-[#0eb2e7] px-5">
@@ -105,6 +116,21 @@ const AllArtAndCraftList = () => {
                                 </svg>
                             </button>
                         </div>
+
+
+                        <select id="pricingType" name="pricingType"
+                            className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
+                            <option value="">Sort By Price</option>
+                            <option value="dsc">Descending Order</option>
+                            <option value="asc">Ascending Order</option>
+                        </select>
+
+
+                        <button
+                            className="border border-[#0eb2e7] bg-[#0eb2e7] text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-[#0e92bd] focus:outline-none focus:shadow-outline">
+                            Reset
+                        </button>
+
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-14 px-4">
