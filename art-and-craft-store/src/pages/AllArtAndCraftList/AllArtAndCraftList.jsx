@@ -93,6 +93,13 @@ const AllArtAndCraftList = () => {
     }
 
 
+    const handleReset = () => {
+        setFilter('');
+        setSort('');
+        setSearch('');
+    }
+
+
     return (
         <section>
             <div className="container mx-auto">
@@ -104,9 +111,9 @@ const AllArtAndCraftList = () => {
                     </div>
 
                     <div className="flex justify-center items-center gap-6">
-                        <select 
-                        onChange={(e) => setFilter(e.target.value)}
-                        value={filter}
+                        <select
+                            onChange={(e) => setFilter(e.target.value)}
+                            value={filter}
                             className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                             <option value="">Filter By Category</option>
                             <option value="Landscape Painting">Landscape Painting</option>
@@ -117,9 +124,9 @@ const AllArtAndCraftList = () => {
                             <option value="Cartoon Drawing">Cartoon Drawing</option>
                         </select>
 
-                        <form 
-                        onSubmit={handleSearch}
-                        className="flex rounded-md border-2 border-[#0eb2e7] overflow-hidden w-96">
+                        <form
+                            onSubmit={handleSearch}
+                            className="flex rounded-md border-2 border-[#0eb2e7] overflow-hidden w-96">
                             <input type="text" name="search" placeholder="Search Something..."
                                 className="w-full outline-none bg-white text-gray-600 text-sm px-4 py-3" />
                             <button type='submit' className="flex items-center justify-center bg-[#0eb2e7] px-5">
@@ -132,11 +139,11 @@ const AllArtAndCraftList = () => {
                         </form>
 
 
-                        <select 
-                        onChange={(e) => setSort(e.target.value)}
-                        id="pricingType" 
-                        name="pricingType"
-                        value={sort}
+                        <select
+                            onChange={(e) => setSort(e.target.value)}
+                            id="pricingType"
+                            name="pricingType"
+                            value={sort}
                             className="h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                             <option value="">Sort By Price</option>
                             <option value="dsc">Descending Order</option>
@@ -145,6 +152,7 @@ const AllArtAndCraftList = () => {
 
 
                         <button
+                            onClick={handleReset}
                             className="border border-[#0eb2e7] bg-[#0eb2e7] text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-[#0e92bd] focus:outline-none focus:shadow-outline">
                             Reset
                         </button>
