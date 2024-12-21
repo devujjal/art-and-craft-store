@@ -5,6 +5,7 @@ import { AuthContext } from '../../provider/AuthProvider';
 import ProfileDropDown from '../ProfileDropDown/ProfileDropDown';
 import '../../routes/protectedRoute.css';
 import { toast } from 'react-toastify';
+import useAxiosCommon from '../../hooks/useAxiosCommon';
 
 
 
@@ -14,6 +15,9 @@ const Header = () => {
     const [display, setDisplay] = useState(false)
     const [isLoading, setIsLoading] = useState(loading);
     const navigate = useNavigate();
+    const axios = useAxiosCommon();
+    const email = user?.email;
+
 
 
     useEffect(() => {
@@ -25,7 +29,18 @@ const Header = () => {
     const handleSignOut = () => {
         signOutUser()
             .then(() => {
-                navigate('/')
+                axios.post('/delete-token', { email })
+                    .then(res => {
+                        console.log(res.data)
+                        if(res.data.message){
+                            navigate('/')
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+
+
             })
             .catch(error => {
                 if (error) {

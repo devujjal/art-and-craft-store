@@ -63,10 +63,24 @@ async function run() {
             const token = jwt.sign(userEmail, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
             res.cookie('token', token, {
                 httpOnly: true,
-                secure: false,
-                maxAge: 360000
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+                maxAge: 360000,
+                path: '/'
             });
             res.send({ success: true });
+        })
+
+
+        app.post('/delete-token', async(req, res) => {
+            res.clearCookie('token', {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+                maxAge: 0,
+                path: '/'
+            })
+            res.send({message: true})
         })
 
 
@@ -145,7 +159,7 @@ async function run() {
             }
 
             if (lessValue && greaterValue) {
-                query.price = { $lte: greaterValue, $gte: lessValue }; 
+                query.price = { $lte: greaterValue, $gte: lessValue };
             }
 
             const result = await allArtAndCraft.countDocuments(query);
