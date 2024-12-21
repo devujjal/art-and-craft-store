@@ -16,7 +16,7 @@ const useAxiosSecure = () => {
         const interceptor = axiosSecure.interceptors.response.use(
             (res) => res,
             async (error) => { // Make the error handler async
-                if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                if (error.response.status === 401 || error.response.status === 403) {
 
                     await signOutUser(); // Use await for cleaner code
                     navigate('/sign-in');
@@ -29,10 +29,12 @@ const useAxiosSecure = () => {
 
         return () => {
             axiosSecure.interceptors.response.eject(interceptor);
-        }// Cleanup on unmount/dependency change
+        } // Cleanup on unmount/dependency change
 
-        
+
     }, [signOutUser, navigate]);
+
+    
 
     return axiosSecure;
 };
