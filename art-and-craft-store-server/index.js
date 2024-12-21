@@ -65,7 +65,7 @@ async function run() {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-                maxAge: 360000,
+                maxAge: 10 * 1000, //360000,
                 path: '/'
             });
             res.send({ success: true });

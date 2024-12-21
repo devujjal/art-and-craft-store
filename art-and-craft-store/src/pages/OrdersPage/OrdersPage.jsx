@@ -1,13 +1,15 @@
-import axios from "axios";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import CarftAndArtCard from "../../componets/CaftAndArtCard/CarftAndArtCard";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 const OrdersPage = () => {
     const { user, setOrders, orders } = useContext(AuthContext)
     const { email } = user;
+    const axiosSecure = useAxiosSecure();
+
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/orders?email=${email}`, {
+        axiosSecure.get(`/orders?email=${email}`, {
             withCredentials: true
         })
             .then(res => {
@@ -16,7 +18,9 @@ const OrdersPage = () => {
             .catch(error => {
                 console.log(error)
             })
-    }, [email, setOrders])
+    }, [email, setOrders, axiosSecure])
+
+
 
     return (
         <section>
