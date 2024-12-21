@@ -79,12 +79,14 @@ async function run() {
 
         app.get('/all-art-and-craft-items', async (req, res) => {
             try {
-
+                console.log(req.query)
                 const page = parseInt(req.query?.page) || 0; // Default to 0 if undefined or invalid
                 const size = parseInt(req.query?.size) || 10; // Default to 10 if undefined or invalid
                 const filter = req.query?.filter;
                 const sort = req.query?.sort;
                 const search = req.query?.search;
+                const lessValue = parseInt(req.query?.less);
+                const greaterValue = parseInt(req.query?.greater);
 
                 let query = {};
                 if (req.query?.email) {
@@ -108,6 +110,10 @@ async function run() {
                     query.item_name = { $regex: search, $options: "i" }
                 }
 
+                if (lessValue && greaterValue) {
+                    query.price = { $lte: greaterValue, $gte: lessValue };
+                }
+
                 const cursor = allArtAndCraft.find(query, options).skip(page * size).limit(size);
                 const result = await cursor.toArray();
                 res.send(result);
@@ -124,6 +130,9 @@ async function run() {
         app.get('/items-count', async (req, res) => {
             const filterText = req.query?.filter;
             const searchText = req.query?.search;
+            const lessValue = parseInt(req.query?.less);
+            const greaterValue = parseInt(req.query?.greater);
+
 
             let query = {};  // filter or query
 
@@ -133,6 +142,10 @@ async function run() {
 
             if (searchText) {
                 query.item_name = { $regex: searchText, $options: "i" }
+            }
+
+            if (lessValue && greaterValue) {
+                query.price = { $lte: greaterValue, $gte: lessValue }; 
             }
 
             const result = await allArtAndCraft.countDocuments(query);

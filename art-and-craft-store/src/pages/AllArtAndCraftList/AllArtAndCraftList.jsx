@@ -18,8 +18,8 @@ const AllArtAndCraftList = () => {
     const [filter, setFilter] = useState('');
     const [sort, setSort] = useState('');
     const [search, setSearch] = useState('');
-    const [lessThen, setLessThen] = useState(undefined)
-    const [graterThen, setGraterThen] = useState(undefined)
+    const [lessThen, setLessThen] = useState('')
+    const [greaterThen, setGreaterThen] = useState('')
 
 
     const numberOfPages = counts.result ? Math.ceil(counts.result / itemsPerPage) : 0;
@@ -31,14 +31,14 @@ const AllArtAndCraftList = () => {
 
     useEffect(() => {
         setCurrentPage(0);
-    }, [itemsPerPage, filter, sort, search])
+    }, [itemsPerPage, filter, sort, search, lessThen, greaterThen])
 
     // data fetch
 
     const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
-        queryKey: ['allItems', currentPage, itemsPerPage, filter, sort, search, lessThen, graterThen],
+        queryKey: ['allItems', currentPage, itemsPerPage, filter, sort, search, lessThen, greaterThen],
         queryFn: async () => {
-            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}&less=${lessThen}&grater=${graterThen}`);
+            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}&less=${lessThen}&greater=${greaterThen}`);
             return data || [];
         },
 
@@ -58,11 +58,11 @@ const AllArtAndCraftList = () => {
 
 
     useEffect(() => {
-        axios.get(`/items-count?filter=${filter}&search=${search}&less=${lessThen}&grater=${graterThen}`)
+        axios.get(`/items-count?filter=${filter}&search=${search}&less=${lessThen}&greater=${greaterThen}`)
             .then(res => {
                 setCounts(res.data)
             })
-    }, [axios, filter, search, lessThen, graterThen])
+    }, [axios, filter, search, lessThen, greaterThen])
 
     console.log(counts)
 
@@ -99,17 +99,20 @@ const AllArtAndCraftList = () => {
         setFilter('');
         setSort('');
         setSearch('');
+        setLessThen('');
+        setGreaterThen('')
     }
 
     const handleFind = (e) => {
         e.preventDefault();
-        const less = parseFloat(e.target.less.value);
-        const grater = parseFloat(e.target.grater.value);
+        const less = e.target.less.value;
+        const grater = e.target.grater.value;
+
         setLessThen(less);
-        setGraterThen(grater)
+        setGreaterThen(grater)
+
     }
 
-    console.log(lessThen, graterThen)
 
 
 
@@ -176,8 +179,8 @@ const AllArtAndCraftList = () => {
                         <form
                             onSubmit={handleFind}
                         >
-                            <input type="text" name="less" className="border border-[#0eb2e7] focus:outline-none mr-4 p-2 " placeholder="$60" />
-                            <input type="text" name="grater" className="border border-[#0eb2e7] focus:outline-none p-2 " placeholder="$100" />
+                            <input type="text" required name="less" className="border border-[#0eb2e7] focus:outline-none mr-4 p-2 " placeholder="$60" />
+                            <input type="text" required name="grater" className="border border-[#0eb2e7] focus:outline-none p-2 " placeholder="$100" />
                             <button
                                 type="submit"
                                 className="border border-[#0eb2e7] bg-[#0eb2e7] text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-[#0e92bd] focus:outline-none focus:shadow-outline">
