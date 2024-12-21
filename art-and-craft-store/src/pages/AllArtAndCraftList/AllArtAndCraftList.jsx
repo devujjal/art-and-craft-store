@@ -18,6 +18,8 @@ const AllArtAndCraftList = () => {
     const [filter, setFilter] = useState('');
     const [sort, setSort] = useState('');
     const [search, setSearch] = useState('');
+    const [lessThen, setLessThen] = useState(undefined)
+    const [graterThen, setGraterThen] = useState(undefined)
 
 
     const numberOfPages = counts.result ? Math.ceil(counts.result / itemsPerPage) : 0;
@@ -34,9 +36,9 @@ const AllArtAndCraftList = () => {
     // data fetch
 
     const { data: artAndCraftItems, error, isError, isLoading } = useQuery({
-        queryKey: ['allItems', currentPage, itemsPerPage, filter, sort, search],
+        queryKey: ['allItems', currentPage, itemsPerPage, filter, sort, search, lessThen, graterThen],
         queryFn: async () => {
-            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}`);
+            const { data } = await axios.get(`/all-art-and-craft-items?page=${currentPage}&size=${itemsPerPage}&filter=${filter}&sort=${sort}&search=${search}&less=${lessThen}&grater=${graterThen}`);
             return data || [];
         },
 
@@ -56,11 +58,11 @@ const AllArtAndCraftList = () => {
 
 
     useEffect(() => {
-        axios.get(`/items-count?filter=${filter}&search=${search}`)
+        axios.get(`/items-count?filter=${filter}&search=${search}&less=${lessThen}&grater=${graterThen}`)
             .then(res => {
                 setCounts(res.data)
             })
-    }, [axios, filter, search])
+    }, [axios, filter, search, lessThen, graterThen])
 
     console.log(counts)
 
@@ -98,6 +100,17 @@ const AllArtAndCraftList = () => {
         setSort('');
         setSearch('');
     }
+
+    const handleFind = (e) => {
+        e.preventDefault();
+        const less = parseFloat(e.target.less.value);
+        const grater = parseFloat(e.target.grater.value);
+        setLessThen(less);
+        setGraterThen(grater)
+    }
+
+    console.log(lessThen, graterThen)
+
 
 
     return (
@@ -157,6 +170,19 @@ const AllArtAndCraftList = () => {
                             Reset
                         </button>
 
+                    </div>
+
+                    <div className="flex justify-center items-center mt-5 gap-4">
+                        <form
+                            onSubmit={handleFind}
+                        >
+                            <input type="text" name="less" className="border border-[#0eb2e7] focus:outline-none mr-4 p-2 " placeholder="$60" />
+                            <input type="text" name="grater" className="border border-[#0eb2e7] focus:outline-none p-2 " placeholder="$100" />
+                            <button
+                                type="submit"
+                                className="border border-[#0eb2e7] bg-[#0eb2e7] text-white rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-[#0e92bd] focus:outline-none focus:shadow-outline">
+                                find
+                            </button>                        </form>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-14 px-4">
