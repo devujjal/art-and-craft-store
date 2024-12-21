@@ -65,14 +65,14 @@ async function run() {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-                maxAge: 10 * 1000, //360000,
+                maxAge: 360000,
                 path: '/'
             });
             res.send({ success: true });
         })
 
 
-        app.post('/delete-token', async(req, res) => {
+        app.post('/delete-token', async (req, res) => {
             res.clearCookie('token', {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
@@ -80,7 +80,7 @@ async function run() {
                 maxAge: 0,
                 path: '/'
             })
-            res.send({message: true})
+            res.send({ message: true })
         })
 
 
